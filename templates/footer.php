@@ -1,5 +1,5 @@
     <hr>
-    <div class="bg-white px-4 pb-4">
+    <div class="bg-white px-4 pb-4 text-brown">
         <div class="row">
             <div class="col-sm-6 mt-4">
                 <p class="cormorant-upright-20">About</p>
@@ -13,10 +13,10 @@
             <div class="col-sm-6 mt-4">
                 <p class="cormorant-upright-20">Contact Us</p>
                 <p>
-                    <a href="+639876543210">+63987 654 3210</a>
+                    <a href="+639876543210" class="text-brown">+63987 654 3210</a>
                 </p>
                 <p>
-                    <a href="mailto:lmnandash@gmail.com">lmnandash@gmail.com</a>
+                    <a href="mailto:lmnandash@gmail.com" class="text-brown">lmnandash@gmail.com</a>
                 </p>
                 <p>Metro Manila, Philippines</p>
                 <p>
@@ -31,11 +31,9 @@
         </div>
     </div>
 
-    <script src="js/jquery-3.7.1.js"></script>
-    <script src="js/sweetalert@11.js"></script>
+    <script src="./js/sweetalert@11.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/cart.js"></script>
+    <script src="./js/jquery-3.7.1.js"></script>
+    <script src="./js/scripts.js"></script>
 </body>
 </html>

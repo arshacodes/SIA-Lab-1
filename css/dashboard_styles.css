@@ -1,0 +1,103 @@
+/* css styles for all files ========== */
+
+@font-face{
+    font-family: "LexendPeta";
+    src: url("../fonts/LexendPeta-Light.ttf")
+}
+
+@font-face{
+    font-family: "CormorantUpright";
+    src: url("../fonts/CormorantUpright-Regular.ttf")
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.bg-cream {
+    background-color: #FFFAF4
+}
+
+.bg-brown {
+    background-color: #351B00
+}
+
+.text-cream {
+    color: #FFFAF4
+}
+
+.cormorant-upright-20 {
+    font-family: "CormorantUpright";
+    font-size: 20px;
+}
+
+.cormorant-upright-12 {
+    font-family: "CormorantUpright";
+    font-size: 12px;
+}
+
+.lexend-peta-12 {
+    font-family: "LexendPeta";
+    font-size: 12px;
+}
+
+.lexend-peta-20 {
+    font-family: "LexendPeta";
+    font-size: 20px;
+}
+
+ul{
+    list-style-type: none;
+}
+
+/* css styles custom to dashboards ========== */
+
+.logo{
+    /* width: 50px; */
+    height: 50px;
+    display: block;
+    margin: auto;
+}
+
+.sidebar{
+    width: 100px;
+    height: 100%;
+    border-right: 1px solid #351b00;
+    /* z-index: 1; */
+}
+
+/* styling icons */
+i{
+    font-size: 1rem;
+    /* color: #FFFAF4; */
+    color: #351B00;
+    width: fit-content;
+}
+
+li div{
+    /* width: fit-content; */
+    text-align: center;
+}
+
+.topbar{
+    width: 100%;
+    /* border-bottom: 1px solid #351b00; */
+    z-index: -1;
+}
+
+hr{
+    color: #351b00;
+    height: 1px;
+    opacity: 100%;
+    /* width: 100%; */
+    margin: 0px;
+}
+
+.content{
+    margin-left: 100px;
+}
+
+.tabpages{
+    display: none;
+}

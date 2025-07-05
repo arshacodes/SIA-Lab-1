@@ -97,6 +97,10 @@ marquee {
     color: #FFFAF4
 }
 
+.text-brown {
+    color: #351B00;
+}
+
 .table-container {
     overflow:auto;
 }
@@ -138,10 +142,10 @@ marquee {
     }
 }
 
-.low-stock td{
-    color:#dc3545 !important;   /* same red Bootstrap uses */
-    font-weight:700 !important; /* bold */
-}
+/* .low-stock td{
+    color:#dc3545 !important;
+    font-weight:700 !important;
+} */
 
 .category-card {
     display: flex;
