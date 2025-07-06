@@ -13,19 +13,19 @@
     <div class="container-fluid py-5">
         <div class="rounded p-4 my-auto bg-white" style="border: 1px solid black;"> <!--decided na tanggalin yung transparency dahil di bagay dun sa logo-->
             <img src="pictures/logo-white.png" style="max-width: 75px" class="mb-4">
-            <p class="lexend-peta-20 my-4">Login</p>
-            <form id="customer-login-form" action="functions/customer_login.php" method="post" class="my-4">
+            <p class="lexend-peta-20 my-4">Admin Login</p>
+            <form id="admin-login-form" action="functions/admin_login_function.php" method="post" class="my-4">
                 <div class="form-group text-start mb-4">
-                    <label for="customer_email">Email:</label>
-                    <input type="email" id="customer_email" name="customer_email" class="form-control lexend-peta-12" required>
+                    <label for="admin_email">Email:</label>
+                    <input type="email" id="admin_email" name="admin_email" class="form-control lexend-peta-12" required>
                 </div>
                 <div class="form-group text-start mb-4">
-                    <label for="customer_password">Password:</label>
-                    <input type="password" id="customer_password" name="customer_password" class="form-control lexend-peta-12" required>
+                    <label for="admin_password">Password:</label>
+                    <input type="password" id="admin_password" name="admin_password" class="form-control lexend-peta-12" required>
                 </div>
                 <button type="submit" class="btn bg-brown text-cream">Login</button>
             </form>
-            <p class="my-4 cormorant-upright-20"><a id="signup-customer-btn" href="register.php"><u>Create Account</u></a> | <a href="admin_login.php"><u>Admin Login</u></a></p>
+            <p class="my-4 cormorant-upright-20"><a href="login.php"><u>Customer Login</u></a></p>
         </div>
     </div>
 

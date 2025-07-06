@@ -2,12 +2,12 @@
 include 'db/db_conn.php';
 session_start();
 
-// if (!isset($_GET['id'])) { header("Location: shop.php"); exit(); }
+if (!isset($_GET['id'])) { header("Location: shop.php"); exit(); }
 
-// $isLoggedIn = isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'customer';
-// $accountUrl  = $isLoggedIn ? "account.php"         : "login.php";
-// $cartUrl     = $isLoggedIn ? "cart.php"            : "login.php";
-// $ordersUrl   = $isLoggedIn ? "orders_tracking.php" : "login.php";
+$isLoggedIn = isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'customer';
+$accountUrl  = $isLoggedIn ? "account.php"         : "login.php";
+$cartUrl     = $isLoggedIn ? "cart.php"            : "login.php";
+$ordersUrl   = $isLoggedIn ? "orders_tracking.php" : "login.php";
 
 $product_id = $_GET['id'];
 $pStmt = $conn->prepare("SELECT * FROM products_tbl WHERE id = ?");
@@ -16,20 +16,20 @@ $pStmt->execute();
 $product = $pStmt->get_result()->fetch_assoc();
 if (!$product) { header("Location: shop.php"); exit(); }
 
-$imgDir = "assets/uploads/";
+$imgDir = "pictures/content/";
 $base   = $product['id']."_".str_replace(" ","-",strtolower($product['name']))."_1";
 foreach (['jpg','jpeg','png'] as $ext) {
     if (file_exists($imgDir.$base.'.'.$ext)) { $leadImg = $imgDir.$base.'.'.$ext; break; }
 }
-$leadImg = $leadImg ?? "assets/logo-brown.png";
+$leadImg = $leadImg ?? "pictures/logo-brown.png";
 
 $rSql = "
-  SELECT r.review_text, r.stars, r.date,
+  SELECT r.review, r.stars, r.created_at,
          CONCAT(c.firstname,' ',LEFT(c.lastname,1),'.') AS customer_name
-  FROM reviews_tbl r
+  FROM product_reviews_tbl r
   JOIN customers_tbl c ON c.id = r.customer_id
   WHERE r.product_id = ?
-  ORDER BY r.date DESC";
+  ORDER BY r.created_at DESC";
 $rStmt = $conn->prepare($rSql);
 $rStmt->bind_param("i",$product_id);
 $rStmt->execute();
@@ -38,28 +38,29 @@ $reviews = $rStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $reviewCount = count($reviews);
 $avgStars = $reviewCount ? array_sum(array_column($reviews,'stars')) / $reviewCount : 0;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title><?= htmlspecialchars($product['name']) ?> | Product Details</title>
-<link rel="icon" href="assets/logo-white.png">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/styles.css">
-<script src="js/jquery-3.7.1.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/sweetalert@11.js"></script>
+  <meta charset="UTF-8">
+  <title><?= htmlspecialchars($product['name']) ?> | Product Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/x-icon" href="pictures/logo-white.png">
+  <!-- <script src="js/jquery-3.7.1.js"></script> -->
+  <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
+  <!-- <script src="js/sweetalert@11.js"></script> -->
 </head>
-<body class="bg-cream">
+<body class="bg-cream lexend-peta-12 text-brown">
 
 <nav class="navbar navbar-expand-md d-flex flex-column bg-white py-0">
   <div class="px-4 my-4 container-fluid row">
     <div class="col p-0 text-start"><a href="javascript:history.back()" class="ms-2 back-btn"><p class="lexend-peta-12">< Back</p></a></div>
-    <div class="col p-0 text-center" style="max-width:fit-content"><a class="navbar-brand m-0" href="index.php"><img src="assets/logo-white.png" style="max-width:75px"></a></div>
+    <div class="col p-0 text-center" style="max-width:fit-content"><a class="navbar-brand m-0" href="index.php"><img src="pictures/logo-white.png" style="max-width:75px"></a></div>
     <div class="col p-0 text-end">
-      <a href="<?= $accountUrl ?>" class="ms-2"><img src="assets/account.svg"></a>
-      <a href="<?= $cartUrl    ?>" class="ms-2"><img src="assets/shopping-cart.svg"></a>
-      <a href="<?= $ordersUrl  ?>" class="ms-2"><img src="assets/orders.svg"></a>
+      <a href="<?= $accountUrl ?>" class="ms-2"><img src="pictures/account.svg"></a>
+      <a href="<?= $cartUrl    ?>" class="ms-2"><img src="pictures/shopping-cart.svg"></a>
+      <a href="<?= $ordersUrl  ?>" class="ms-2"><img src="pictures/orders.svg"></a>
     </div>
   </div><hr>
 </nav>
@@ -84,29 +85,17 @@ $avgStars = $reviewCount ? array_sum(array_column($reviews,'stars')) / $reviewCo
 
     <div class="col-md-6 text-start my-4" style="max-width:400px">
       <p class="lexend-peta-20"><b><?= htmlspecialchars($product['name']) ?></b></p>
-      <p class="cormorant-upright-20">₱<?= number_format($product['buy_price'],2) ?></p>
+      <p class="cormorant-upright-20">₱<?= number_format($product['shelf_price'],2) ?></p>
       <hr class="my-4">
       <form id="add_to_cart" method="post" action="functions/add_to_cart.php">
         <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
         <p class="cormorant-upright-20 mb-4"><?= htmlspecialchars($product['description']) ?></p>
-
-        <div class="form-group mb-4" style="color:#351B00">
-          <label class="mb-2"><b>Add engraving text?</b><br>*Additional 200 pesos (optional)</label>
-          <input type="text" name="avail_engraving" class="form-control lexend-peta-12" placeholder="ex: Maria">
-        </div>
-
-        <div class="form-group mb-4" style="color:#351B00">
-          <label class="mb-2"><b>Add giftbox?</b><br>*Additional 200 pesos</label>
-          <div class="form-check"><input class="form-check-input" type="radio" name="avail_giftbox" value="no" required><label class="form-check-label">No</label></div>
-          <div class="form-check"><input class="form-check-input" type="radio" name="avail_giftbox" value="yes" required><label class="form-check-label">Yes</label></div>
-        </div>
-
         <div class="form-group mb-4" style="color:#351B00">
           <label class="mb-2"><b>Quantity:</b></label>
           <input type="number" name="quantity" class="form-control lexend-peta-12" value="1" min="1" required>
         </div>
 
-        <button class="btn bg-brown text-cream w-100 lexend-peta-12 mb-4">ADD TO CART</button>
+        <button class="btn bg-brown text-cream w-100 lexend-peta-12 mb-4" type="submit">ADD TO CART</button>
       </form>
     </div>
   </div>
@@ -128,8 +117,8 @@ $avgStars = $reviewCount ? array_sum(array_column($reviews,'stars')) / $reviewCo
                     <?= str_repeat('★',$r['stars']).str_repeat('☆',5-$r['stars']) ?>
                   </span>
                 </div>
-                <p class="mb-2 cormorant-upright-20"><?= nl2br(htmlspecialchars($r['review_text'])) ?></p>
-                <small class="text-muted"><?= date('M j, Y',strtotime($r['date'])) ?></small>
+                <p class="mb-2 cormorant-upright-20"><?= nl2br(htmlspecialchars($r['review'])) ?></p>
+                <small class="text-muted"><?= date('M j, Y',strtotime($r['created_at'])) ?></small>
               </div>
             <?php endforeach; ?>
           <?php else: ?>

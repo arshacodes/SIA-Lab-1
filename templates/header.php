@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// $isLoggedIn = isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'customer';
+$isLoggedIn = isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'customer';
 
-// $accountUrl = $isLoggedIn ? "account.php" : "login.php";
-// $favoritesUrl = $isLoggedIn ? "favorites.php" : "login.php";
-// $cartUrl = $isLoggedIn ? "cart.php" : "login.php";
-// $ordersUrl = $isLoggedIn ? "orders_tracking.php" : "login.php";
+$accountUrl = $isLoggedIn ? "account.php" : "login.php";
+$wishlistUrl = $isLoggedIn ? "wishlist.php" : "login.php";
+$cartUrl = $isLoggedIn ? "cart.php" : "login.php";
+$ordersUrl = $isLoggedIn ? "orders_tracking.php" : "login.php";
 ?>
 
 <!DOCTYPE html>

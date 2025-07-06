@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/flip_card_styles.css">
-    <link rel="icon" type="image/x-icon" href="assets/logo-white.png">
+    <link rel="icon" type="image/x-icon" href="pictures/logo-white.png">
     <title>LMN & ASH Leathers | Log in</title>
     <script src="js/jquery-3.7.1.js"></script>
     <script src="js/sweetalert@11.js"></script>
@@ -14,7 +14,7 @@
     <script src="js/scripts.js"></script>
 </head>
 <body class="bg-cream text-center py-4" style="max-height: 100%">
-    <img src="assets/logo-cream.png" style="max-width: 75px" class="mb-4">
+    <img src="pictures/logo-cream.png" style="max-width: 75px" class="mb-4">
     <div class="flip-card container-fluid">
         <div class="flip-card-inner" id="flip-card-inner">
             <div class="flip-card-front bg-white rounded p-4 my-auto">

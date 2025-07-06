@@ -20,7 +20,7 @@ body.user-page{
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
-    overflow:hidden;
+    overflow: auto;
     font-size: 12px;
     
 }
