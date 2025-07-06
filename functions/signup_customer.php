@@ -26,7 +26,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    $query2 = "INSERT INTO customers_tbl(firstname, lastname, phone, email, address_house, address_street, address_city, address_province, password, account_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query2 = "INSERT INTO customers_tbl(firstname, lastname, phone, email, address_house, address_street, address_city, address_province, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt2 = $conn->prepare($query2);
     $stmt2->bind_param("sssssssss", $firstname, $lastname, $phone, $email, $house, $street, $city, $province, $hashed_password);
     $stmt2->execute();

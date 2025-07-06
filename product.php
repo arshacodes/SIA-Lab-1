@@ -47,9 +47,6 @@ $avgStars = $reviewCount ? array_sum(array_column($reviews,'stars')) / $reviewCo
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/x-icon" href="pictures/logo-white.png">
-  <!-- <script src="js/jquery-3.7.1.js"></script> -->
-  <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
-  <!-- <script src="js/sweetalert@11.js"></script> -->
 </head>
 <body class="bg-cream lexend-peta-12 text-brown">
 

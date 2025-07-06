@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="pictures/logo-white.png">
     <title>LMN & ASH Leathers | Sign up</title>
-    <!-- <script src="js/jquery-3.7.1.js"></script>
-    <script src="js/sweetalert@11.js"></script> -->
-    <!-- <script src="js/scripts.js"></script> -->
 </head>
 <body class="user-page text-center py-4">
     <div class="card p-4 m-auto bg-white" style="width:80%; max-width:500px; height:100%; border:1px solid black;">
@@ -31,7 +28,7 @@
             </div>
             <div class="form-group text-start mb-4" style="color:#351B00">
                 <label for="new_customer_phone">Phone:</label>
-                <input type="tel" id="new_customer_phone" name="new_customer_phone" class="form-control lexend-peta-12" required>
+                <input type="tel" id="new_customer_phone" name="new_customer_phone" class="form-control lexend-peta-12" pattern="[0-9]{11}" required>
             </div>
             <div class="form-group text-start mb-4" style="color:#351B00">
                 <label for="new_customer_email">House:</label>

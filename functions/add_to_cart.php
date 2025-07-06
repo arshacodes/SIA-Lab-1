@@ -5,7 +5,6 @@ session_start();
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['user_id'])) {
-    // header("Location: login.php");
     echo json_encode(['error' => true, 'message' => 'User not logged in']);
     exit();
 }
@@ -13,11 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 $product_id = $_POST['product_id'] ?? null;
 $customer_id = $_SESSION['user_id'];
 
-// if ($_POST['avail_giftbox'] == 'yes'){
-//     $avail_giftbox = 1;
-// }else{
-//     $avail_giftbox = 0;
-// }
 $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
 
 if (!$product_id || $quantity < 1) {
@@ -60,7 +54,4 @@ if ($check_row = $check_result->fetch_assoc()) {
 
 $check_stmt->close();
 $conn->close();
-// header("Location: ../cart.php")   // or wherever you’d like them to land
-// exit();
-
 ?>

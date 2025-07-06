@@ -46,50 +46,36 @@ include 'templates/header.php';
         <?php endwhile; ?>
     </div>
 </div>
-<div id="categories-section" class="bg-brown px-4 p-4 m-0 text-brown">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="category-card">
-                    <img src="./pictures/content/16_crimson-carry_1.jpg" alt="Sling Bags" class="category-img">
-                    <div class="category-label">Sling Bags</div>
-                </div>
+<div id="categories-section" class="bg-brown py-5">
+    <div class="container">
+        <div class="bags">
+            <div class="category-item">
+                <img src="./pictures/content/16_crimson-carry_1.jpg" class="category-img">
+                <div class="category-label">Sling Bags</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="category-card">
-                    <img src="./pictures/content/4_black-ember_1.jpg" alt="Clutch Bags" class="category-img">
-                    <div class="category-label">Clutch Bags</div>
-                </div>
+            <div class="category-item">
+                <img src="./pictures/content/4_black-ember_1.jpg" class="category-img">
+                <div class="category-label">Clutch Bags</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="category-card">
-                    <img src="./pictures/content/3_cavern-black_1.png" alt="Brief Case" class="category-img">
-                    <div class="category-label">Brief Case</div>
-                </div>
+            <div class="category-item">
+                <img src="./pictures/content/3_cavern-black_1.png" class="category-img">
+                <div class="category-label">Brief Case</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="category-card">
-                    <img src="./pictures/content/14_golden-carry_1.png" alt="Tote Bags" class="category-img">
-                    <div class="category-label">Tote Bags</div>
-                </div>
+            <div class="category-item tall">
+                <img src="./pictures/content/14_golden-carry_1.png" class="category-img">
+                <div class="category-label">Tote Bags</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="category-card">
-                    <img src="./pictures/content/1_sand-bliss_1.jpg" alt="Belt Bags" class="category-img">
-                    <div class="category-label">Belt Bags</div>
-                </div>
+            <div class="category-item">
+                <img src="./pictures/content/1_sand-bliss_1.jpg" class="category-img">
+                <div class="category-label">Belt Bags</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="category-card">
-                    <img src="./pictures/content/5_auburn-ridge_1.png" alt="Backpacks" class="category-img">
-                    <div class="category-label">Backpacks</div>
-                </div>
+            <div class="category-item">
+                <img src="./pictures/content/5_auburn-ridge_1.png" class="category-img">
+                <div class="category-label">Backpacks</div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="category-card">
-                    <img src="./pictures/content/7_bronze-trail_1.png" alt="Messenger Bags" class="category-img">
-                    <div class="category-label">Messenger Bags</div>
-                </div>
+            <div class="category-item">
+                <img src="./pictures/content/7_bronze-trail_1.png" class="category-img">
+                <div class="category-label">Messenger Bags</div>
             </div>
         </div>
     </div>

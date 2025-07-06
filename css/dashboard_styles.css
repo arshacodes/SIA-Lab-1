@@ -27,6 +27,11 @@
     color: #FFFAF4
 }
 
+.text-brown {
+    color: #351B00
+}
+
+
 .cormorant-upright-20 {
     font-family: "CormorantUpright";
     font-size: 20px;
@@ -53,25 +58,16 @@ ul{
 
 /* css styles custom to dashboards ========== */
 
-.logo{
-    /* width: 50px; */
-    height: 50px;
-    display: block;
-    margin: auto;
-}
-
-.sidebar{
-    width: 100px;
-    height: 100%;
-    border-right: 1px solid #351b00;
-    /* z-index: 1; */
+.btn-outline-brown {
+    border: 1px solid #351B00;
+    color: #351B00;
 }
 
 /* styling icons */
 i{
     font-size: 1rem;
-    /* color: #FFFAF4; */
-    color: #351B00;
+    color: #FFFAF4;
+    /* color: #351B00; */
     width: fit-content;
 }
 
@@ -94,10 +90,61 @@ hr{
     margin: 0px;
 }
 
-.content{
-    margin-left: 100px;
-}
+/* .content{
+    margin-left: 50px;
+} */
 
 .tabpages{
     display: none;
 }
+
+/* .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #f8f9fa;
+    transition: width 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar:not(.collapsed) {
+    width: 200px;
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 10px;
+    right: -40px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+
+.icon-bar,
+.nav-panel ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 50px;
+    align-items: center;
+}
+
+.nav-panel ul {
+    align-items: flex-start;
+}
+
+.sidebar.collapsed .nav-panel {
+    display: none;
+}
+
+.sidebar.collapsed .icon-bar {
+    display: flex;
+}
+
+.sidebar:not(.collapsed) .icon-bar {
+    display: none;
+} */

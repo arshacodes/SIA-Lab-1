@@ -1,4 +1,4 @@
-<?php
+<!-- ?php
 include '../db/db_conn.php';
 session_start();
 
@@ -12,9 +12,9 @@ if (!isset($_POST['order_id'])) {
 $order_id = $_POST['order_id'];
 
 $order_query = "
-    SELECT o.id, o.reference_number, CONCAT(c.firstname, ' ', c.lastname) AS customer_name, 
-           IFNULL(o.price_total, 0) AS price_total, cs.name AS courier_name, o.address, 
-           o.order_date, o.required_date, o.shipping_date, IFNULL(o.comments, 'No comments') AS comments, 
+    SELECT o.id, o.reference_code, CONCAT(c.firstname, ' ', c.lastname) AS customer_name, 
+           IFNULL(o.total_amount, 0) AS total_amount, cs.name AS courier_name, o.address_house, o.address_street, o.address_city, o.address_province 
+           o.checkout_date, o.required_date, o.shipping_date, IFNULL(o.comments, 'No comments') AS comments, 
            os.name AS status_name
     FROM orders_tbl o
     LEFT JOIN customers_tbl c ON o.customer_id = c.id
@@ -61,4 +61,61 @@ echo json_encode([
 $order_stmt->close();
 $product_stmt->close();
 $conn->close();
+?> -->
+
+<?php
+include 'db/db_conn.php';
+
+$order_id = intval($_GET['id'] ?? 0);
+
+$query = "
+SELECT 
+    o.reference_code,
+    o.customer_id,
+    CONCAT(c.firstname, ' ', c.lastname) AS customer_name,
+    o.total_amount,
+    cs.name AS courier,
+    CONCAT(o.address_house, ', ', o.address_street, ', ', o.address_city, ', ', o.address_province) AS address,
+    DATE(o.order_date) AS order_date,
+    DATE(o.required_date) AS required_date,
+    DATE(o.shipping_date) AS shipping_date,
+    o.comments
+FROM orders_tbl o
+JOIN customers_tbl c ON o.customer_id = c.id
+JOIN courier_services_tbl cs ON o.courier_service = cs.id
+WHERE o.id = ?
+";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $order_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$order = $result->fetch_assoc();
+$stmt->close();
+
+// Get order items
+$items = [];
+$item_query = "
+SELECT 
+    p.name AS product_name,
+    oi.unit_price,
+    oi.quantity,
+    oi.engraving,
+    oi.giftbox
+FROM order_items_tbl oi
+JOIN products_tbl p ON oi.product_id = p.id
+WHERE oi.order_id = ?
+";
+$item_stmt = $conn->prepare($item_query);
+$item_stmt->bind_param("i", $order_id);
+$item_stmt->execute();
+$item_result = $item_stmt->get_result();
+while ($item_row = $item_result->fetch_assoc()) {
+    $items[] = $item_row;
+}
+$item_stmt->close();
+
+echo json_encode(["order" => $order, "items" => $items]);
+$conn->close();
 ?>
+

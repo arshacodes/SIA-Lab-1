@@ -11,6 +11,7 @@
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body.user-page{
@@ -147,29 +148,38 @@ marquee {
     font-weight:700 !important;
 } */
 
-.category-card {
-    display: flex;
+.bags {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.category-item {
     position: relative;
-    border-radius: 0.5rem;
     overflow: hidden;
-    margin-bottom: 1rem;
+    display: inline-block;
+    border-radius: 8px;
+    height: 220px; 
+}
+
+.category-item.tall {
+    grid-row: span 2;
+    height: 460px;
 }
 
 .category-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-.category-label{
+.category-label {
     position: absolute;
-    bottom: 1rem;
-    left: 1rem;
+    bottom: 15px;
+    left: 15px;
     background-color: rgba(0, 0, 0, 0.6);
     color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 10px;
 }
-
-

@@ -1,4 +1,4 @@
-<?php
+<!-- ?php
 include '../db/db_conn.php';
 session_start();
 header('Content-Type: application/json');
@@ -48,4 +48,29 @@ echo json_encode([
 ]);
 
 $stmt->close();
+$conn->close(); -->
+
+<?php
+include 'db/db_conn.php';
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+$order_id = intval($data['order_id'] ?? 0);
+$order_status = intval($data['order_status'] ?? 0);
+
+if ($order_id > 0 && $order_status > 0) {
+    $stmt = $conn->prepare("UPDATE orders_tbl SET order_status = ? WHERE id = ?");
+    $stmt->bind_param("ii", $order_status, $order_id);
+
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'DB update failed']);
+    }
+    $stmt->close();
+} else {
+    echo json_encode(['success' => false, 'error' => 'Invalid data']);
+}
+
 $conn->close();
+?>

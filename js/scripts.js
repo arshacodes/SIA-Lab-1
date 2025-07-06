@@ -14,7 +14,7 @@ $(document).ready(function (){
                     icon: response.error ? 'error' : 'success'
                 }).then(() => {
                     if (!response.error) {
-                        window.location.href = 'index.php';
+                        window.location.href = 'login.php';
                     }
                 });
             },
