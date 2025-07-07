@@ -2,6 +2,78 @@
 // insert code for verifying user role, before access. if yes, show this page. if no, tell them they have unauthorized access
 include 'db/db_conn.php';
 
+$to_ship_query = "
+  SELECT COUNT(*) AS to_ship_count
+  FROM orders_tbl o
+  JOIN order_status_tbl s ON o.order_status = s.id
+  WHERE o.order_status = 1
+";
+
+$to_ship_result = $conn->query($to_ship_query);
+$to_ship_data = $to_ship_result->fetch_assoc();
+$toShipCount = $to_ship_data['to_ship_count'];
+
+$to_receive_query = "
+  SELECT COUNT(*) AS to_receive_count
+  FROM orders_tbl o
+  JOIN order_status_tbl s ON o.order_status = s.id
+  WHERE o.order_status = 2
+";
+
+$to_receive_result = $conn->query($to_receive_query);
+$to_receive_data = $to_receive_result->fetch_assoc();
+$toReceiveCount = $to_receive_data['to_receive_count'];
+
+$received_query = "
+  SELECT COUNT(*) AS received_count
+  FROM orders_tbl o
+  JOIN order_status_tbl s ON o.order_status = s.id
+  WHERE o.order_status = 3
+";
+
+$received_result = $conn->query($received_query);
+$received_data = $received_result->fetch_assoc();
+$receivedCount = $received_data['received_count'];
+
+$orders_query = "
+     SELECT 
+        o.id AS order_id,
+        o.reference_code,
+        o.total_amount,
+        o.courier_service,
+        o.customer_id,
+        o.checkout_date,
+        o.required_date,
+        o.shipping_date,
+        o.order_status,
+        o.comments,
+        CONCAT(o.address_house, ' ', o.address_street, ' ', o.address_city, ' ', o.address_province) AS address,
+        CONCAT(c.firstname, ' ', c.lastname) AS customer_name,
+        s.name AS order_status_name
+    FROM orders_tbl o
+    JOIN customers_tbl c ON o.customer_id = c.id
+    JOIN order_status_tbl s ON o.order_status = s.id
+    JOIN courier_services_tbl cs ON o.courier_service = cs.id
+    ORDER BY order_id
+";
+
+$orders_result = $conn->query($orders_query);
+
+
+$products_query = "
+    SELECT 
+        p.id AS product_id,
+        p.name,
+        p.product_category,
+        p.shelf_price,
+        p.description,
+        p.sales
+    FROM products_tbl p
+    JOIN product_categories_tbl c ON p.product_category = c.id
+    ORDER BY product_id
+";
+
+$products_result = $conn->query($products_query);
 ?>
 
 <!DOCTYPE html>
@@ -60,8 +132,10 @@ include 'db/db_conn.php';
                 <div class="card p-4 m-0 border-0">
                     <div class="d-flex justify-content-between mb-2">
                         <span class="lexend-peta-20 card-title"><b>Orders</b></span>
-                        <span>
-                            badges
+                        <span class="d-flex flex-row">
+                            <span class="p-2 text-brown"><b>To Ship: </b><?php echo htmlspecialchars($toShipCount); ?></span>
+                            <span class="p-2 text-brown"><b>To Receive: </b><?php echo htmlspecialchars($toReceiveCount); ?></span>
+                            <span class="p-2 text-brown"><b>Received: </b><?php echo htmlspecialchars($receivedCount); ?></span>
                         </span>
                     </div>
                     <div class="p-0 mb-2">
@@ -71,113 +145,113 @@ include 'db/db_conn.php';
                     <table class="table bg-white">
                         <thead class="">
                             <tr class="">
-                                <th class="lexend-peta-12">
-                                    ID
-                                    <button style="max-height:20px" class="sort-toggle btn btn-sm p-0" data-sort="id" data-dir="asc">⇅</button>
-                                </th>
-                                <th class="lexend-peta-12">
-                                    Reference Code
-                                    <button style="max-height:20px" class="sort-toggle btn btn-sm p-0" data-sort="reference_code" data-dir="asc">⇅</button>
-                                </th>
-                                <th class="lexend-peta-12">
-                                    Customer Name
-                                    <button style="max-height:20px" class="sort-toggle btn btn-sm p-0" data-sort="customer_name" data-dir="asc">⇅</button>
-                                </th>
-                                <th class="lexend-peta-12">
-                                    Required Date
-                                    <button style="max-height:20px" class="sort-toggle btn btn-sm p-0" data-sort="required_date" data-dir="asc">⇅</button>
-                                </th>
-                                <th class="lexend-peta-12 h-100">Status</th>
-                                <th class="lexend-peta-12 h-100">Details</th>
+                                <th class="lexend-peta-12">ID</th>
+                                <th class="lexend-peta-12">Reference Code</th>
+                                <th class="lexend-peta-12">Customer Name</th>
+                                <th class="lexend-peta-12">Required Date</th>
+                                <th class="lexend-peta-12">Status</th>
+                                <th class="lexend-peta-12">Details</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                                $statusOptions = [];
-                                $statusQuery = $conn->query("SELECT o.id, o.name FROM order_status_tbl o");
-                                while ($statusRow = $statusQuery->fetch_assoc()) {
-                                    $statusOptions[] = $statusRow;
-                                }
+                            <?php if ($orders_result->num_rows > 0):
+                                while ($order = $orders_result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($order['order_id']); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($order['reference_code']); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($order['customer_name'], 2); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($order['required_date']); ?></td>
+                                        <td>
+                                            <select class="form-select update-order-status lexend-peta-12 btn-outline-brown"
+                                                    data-order-id="<?= $order['order_id']; ?>">
+                                                <?php
+                                                $statusRes = $conn->query("SELECT * FROM order_status_tbl ORDER BY id");
+                                                while ($s = $statusRes->fetch_assoc()):
+                                                    // $sel = $s['id'] == $order['status_id'] ? 'selected' : '';
+                                                    $sel = $s['id'] == $order['order_status'] ? 'selected' : '';
+                                                    $dis = $s['id'] == 3                  ? 'disabled'  : '';
+                                                ?>
+                                                    <option value="<?= $s['id']; ?>" <?= "$sel $dis" ?>>
+                                                        <?= htmlspecialchars($s['name']); ?>
+                                                    </option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </td>
 
-                                $sortColumn = $_GET['sort'] ?? 'o.id';
-                                $sortDir = $_GET['dir'] ?? 'asc';
-
-                                $validCols = ['o.id', 'o.reference_code', 'customer_name', 'o.required_date'];
-                                if (!in_array($sortColumn, $validCols)) $sortColumn = 'id';
-                                if (!in_array($sortDir, ['asc', 'desc'])) $sortDir = 'asc';
-
-                                $sql = "
-                                SELECT 
-                                    o.id AS order_id,
-                                    o.reference_code,
-                                    o.customer_id,
-                                    o.required_date,
-                                    o.order_status,
-                                    CONCAT(c.firstname, ' ', c.lastname) AS customer_name,
-                                    s.name AS order_status_name
-                                FROM orders_tbl o
-                                JOIN customers_tbl c ON o.customer_id = c.id
-                                JOIN order_status_tbl s ON o.order_status = s.id
-                                ORDER BY $sortColumn $sortDir
-                                ";
-
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row["order_id"] . "</td>";
-                                    echo "<td>" . $row["reference_code"] . "</td>";
-                                    echo "<td>" . htmlspecialchars($row["customer_name"]) . "</td>";
-                                    echo "<td>" . date("F j, Y", strtotime($row["required_date"])) . "</td>";
-
-                                    echo "<td>";
-                                    echo "<select class='form-select form-select-sm update-status btn-outline-brown lexend-peta-12' data-order-id='" . $row["order_id"] . "'>";
-                                    foreach ($statusOptions as $option) {
-                                    $selected = ($row["order_status"] == $option["id"]) ? "selected" : "";
-                                    echo "<option value='" . $option["id"] . "' $selected>" . htmlspecialchars($option["name"]) . "</option>";
-                                    }
-                                    echo "</select></td>";
-                            ?>
-
-                                    <td>
-                                        <button class="btn view-order-details bg-brown text-cream rounded lexend-peta-12 p-1"
-                                            data-order-id="<?php echo $order['id']; ?>"
-                                            data-reference="<?php echo $order['reference_number']; ?>"
-                                            data-customer="<?php echo $order['customer_name']; ?>"
-                                            data-total="<?php echo $order['price_total']; ?>"
-                                            data-courier="<?php echo $order['courier_service_id']; ?>"
-                                            data-address="<?php echo $order['address']; ?>"
-                                            data-order-date="<?php echo $order['order_date']; ?>"
-                                            data-required-date="<?php echo $order['required_date']; ?>"
-                                            data-comments="<?php echo htmlspecialchars($order['comments']); ?>">
+                                        <td>
+                                            <button class="btn view-order-details bg-brown text-cream rounded lexend-peta-12 p-1"
+                                                data-order-id="<?php echo $order['order_id']; ?>"
+                                                data-reference-code="<?php echo $order['reference_code']; ?>"
+                                                data-customer-name="<?php echo $order['customer_name']; ?>"
+                                                data-total-amount="<?php echo $order['total_amount']; ?>"
+                                                data-courier-service="<?php echo $order['courier_service']; ?>"
+                                                data-address="<?php echo $order['address']; ?>"
+                                                data-checkout-date="<?php echo $order['checkout_date']; ?>"
+                                                data-required-date="<?php echo $order['required_date']; ?>"
+                                                data-shipping-date="<?php echo $order['shipping_date']; ?>"
+                                                data-comments="<?php echo htmlspecialchars($order['comments']); ?>">
                                             View Details
                                         </button>
-                                    </td>
-
-                            <?php
-                                    echo "</tr>";
-                                }
-                                } else {
-                                echo "<tr><td colspan='6'>No orders found.</td></tr>";
-                                }
-                                $conn->close();
-                            ?>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr><td colspan="8" style="text-align:center; color:red;">No orders available.</td></tr>
+                            <?php endif; ?>
 
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-end">
+                    <!-- <div class="d-flex justify-content-end">
                         <button id="export-orders" class="btn bg-brown text-cream lexend-peta-12">Export</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div id="sales-products-tabpage" class="tabpages m-0 p-0">
-                <div class="row g-2">
-                    <div class="col-12 col-sm-6 p-0 m-0">
-                        <div class="card p-4">
-                            
-                        </div>
+                <div class="card p-4 m-0 border-0">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="lexend-peta-20 card-title"><b>Products</b></span>
+                        <!-- <span class="d-flex flex-row">
+                            <span class="p-2 text-brown"><b>To Ship: </b>?php echo htmlspecialchars($toShipCount); ?></span>
+                            <span class="p-2 text-brown"><b>To Receive: </b>?php echo htmlspecialchars($toReceiveCount); ?></span>
+                            <span class="p-2 text-brown"><b>Received: </b>?php echo htmlspecialchars($receivedCount); ?></span>
+                        </span> -->
                     </div>
+                    <div class="p-0 mb-2">
+                        <input type="text" id="search-products-box" placeholder="Search" class="form-control lexend-peta-12">
+                    </div>
+                    <!-- <hr class="mb-4"> -->
+                    <table class="table bg-white">
+                        <thead class="">
+                            <tr class="">
+                                <th class="lexend-peta-12">ID</th>
+                                <th class="lexend-peta-12">Product</th>
+                                <th class="lexend-peta-12">Category</th>
+                                <th class="lexend-peta-12">Price (₱)</th>
+                                <th class="lexend-peta-12" style="width: 700px">Description</th>
+                                <th class="lexend-peta-12">Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($products_result->num_rows > 0):
+                                while ($product = $products_result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($product['product_id']); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($product['name']); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($product['product_category'], 2); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($product['shelf_price']); ?></td>
+                                        <td style="color:#351B00" style="width: 700px"><?php echo htmlspecialchars($product['description'], 2); ?></td>
+                                        <td style="color:#351B00"><?php echo htmlspecialchars($product['sales'], 2); ?></td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr><td colspan="8" style="text-align:center; color:red;">No products available.</td></tr>
+                            <?php endif; ?>
+
+                        </tbody>
+                    </table>
+                    <!-- <div class="d-flex justify-content-end">
+                        <button id="export-orders" class="btn bg-brown text-cream lexend-peta-12">Export</button>
+                    </div> -->
                 </div>
             </div>
         </div>

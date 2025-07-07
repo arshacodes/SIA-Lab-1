@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/x-icon" href="pictures/logo-white.png">
     <title>LMN & ASH Leathers | Log in</title>
-    <!-- <script src="js/scripts.js"></script> -->
 </head>
 <body class="user-page py-4" style="max-height:100%">
     <div class="container-fluid py-5">
-        <div class="rounded p-4 my-auto bg-white" style="border: 1px solid black;"> <!--decided na tanggalin yung transparency dahil di bagay dun sa logo-->
+        <div class="rounded p-4 my-auto bg-white" style="border: 1px solid black;">
             <img src="pictures/logo-white.png" style="max-width: 75px" class="mb-4">
             <p class="lexend-peta-20 my-4">Login</p>
             <form id="customer-login-form" action="functions/customer_login.php" method="post" class="my-4">
